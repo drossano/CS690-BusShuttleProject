@@ -14,13 +14,17 @@ public class DataManager
 
     Loops = [new Loop("Red"), new Loop("Green"), new Loop("Blue")];
 
-    Stops = [new Stop("Music"), new Stop("Tower"), new Stop("Oakwood"), new Stop("Anthony"), new Stop("Letterman")];
+    Stops = [];
+    var stopsFileContent = File.ReadAllLines("stops.txt");
+    foreach (var stopName in stopsFileContent)
+    {
+      Stops.Add(new Stop(stopName));
+    }
 
-    Loops[0].Stops.Add(Stops[0]);
-    Loops[0].Stops.Add(Stops[1]);
-    Loops[0].Stops.Add(Stops[2]);
-    Loops[0].Stops.Add(Stops[3]);
-    Loops[0].Stops.Add(Stops[4]);
+    foreach (var stop in Stops)
+    {
+      Loops[0].Stops.Add(stop);
+    }
 
     Drivers = [new Driver("Dean Rossano"), new Driver("Jane Doe")];
 
@@ -32,5 +36,26 @@ public class DataManager
     this.PassengerData.Add(data);
     this.fileSaver.AppendData(data);
 
+  }
+
+  public void SyncStops()
+  {
+    File.Delete("stops.txt");
+    foreach (var stop in Stops)
+    {
+      File.AppendAllText("stops.txt", stop.Name + Environment.NewLine);
+    }
+  }
+
+  public void AddStop(Stop stop)
+  {
+    Stops.Add(stop);
+    SyncStops();
+  }
+
+  public void RemoveStop(Stop stop)
+  {
+    Stops.Remove(stop);
+    SyncStops();
   }
 }
