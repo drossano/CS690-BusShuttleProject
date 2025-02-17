@@ -35,4 +35,5 @@ public class FileSaverTests
         var contentFromFile = File.ReadAllText(testFileName);
         Assert.Equal("MyDriver:MyLoop:MyStop:5" + Environment.NewLine, contentFromFile);
     }
+
 }

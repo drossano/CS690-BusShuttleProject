@@ -61,10 +61,50 @@ public class ConsoleUI
 
         command = AnsiConsole.Prompt(
         new SelectionPrompt<string>()
-            .Title("Please select mode")
+            .Title("What's next?")
             .AddChoices([
-            "end", "continue"
+            "continue", "end"
             ]));
+      } while (command != "end");
+    }
+    else if (mode == "manager")
+    {
+      string command;
+      do
+      {
+
+        command = AnsiConsole.Prompt(
+        new SelectionPrompt<string>()
+            .Title("What do you want to do?")
+            .AddChoices([
+            "add stop", "delete stop", "list stops", "end"
+            ]));
+
+        if (command == "add stop")
+        {
+          var newStopName = AnsiConsole.Prompt(new TextPrompt<string>("Enter new stop name:"));
+          dataManager.AddStop(new Stop(newStopName));
+        }
+        else if (command == "delete stop")
+        {
+          Stop stopToDelete = AnsiConsole.Prompt(
+          new SelectionPrompt<Stop>()
+              .Title("Please select a stop to delete.")
+              .AddChoices(dataManager.Stops
+              ));
+          dataManager.RemoveStop(stopToDelete);
+
+        }
+        else if (command == "list stops")
+        {
+          var stopsTable = new Table();
+          stopsTable.AddColumn("Stop Name");
+          foreach (var stop in dataManager.Stops)
+          {
+            stopsTable.AddRow(stop.Name);
+          }
+          AnsiConsole.Write(stopsTable);
+        }
       } while (command != "end");
     }
   }
